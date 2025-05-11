@@ -1,3 +1,6 @@
+/- 
+docs: https://lean-lang.org/theorem_proving_in_lean4/dependent_type_theory.html 
+-/
 #check Nat × Nat → Nat
 #check (0, 1)
 #eval (2,3).2
