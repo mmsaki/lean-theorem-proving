@@ -12,22 +12,49 @@ example : p ∨ q ↔ q ∨ p :=
     (fun (h: q ∨ p) => h.elim (fun hp => Or.inr hp) (fun hq => Or.inl hq))
 
 -- associativity of ∧ and ∨
-example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) := sorry
-example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) := sorry
+example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
+  Iff.intro
+    (fun (h: (p ∧ q) ∧ r) => sorry)
+    (fun (h: p ∧ (q ∧ r)) => sorry)
+example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
+  Iff.intro
+    (fun (h: (p ∨ q) ∨ r) => sorry)
+    (fun (h: p ∨ (q ∨ r)) => sorry)
 
 -- distributivity
-example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) := sorry
-example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) := sorry
+example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
+  Iff.intro
+    (fun (h: p ∧ (q ∨ r)) => sorry)
+    (fun (h: (p ∧ q) ∨ (p ∧ r)) => sorry)
+example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
+  Iff.intro
+    (fun (h: p ∨ (q ∧ r)) => sorry)
+    (fun (h: (p ∨ q) ∧ (p ∨ r)) => sorry)
 
 -- other properties
-example : (p → (q → r)) ↔ (p ∧ q → r) := sorry
-example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) := sorry
-example : ¬(p ∨ q) ↔ ¬p ∧ ¬q := sorry
+example : (p → (q → r)) ↔ (p ∧ q → r) :=
+  Iff.intro
+    (fun (h: p → (q → r)) => sorry)
+    (fun (h: (p ∧ q → r)) => sorry)
+example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) :=
+  Iff.intro
+    (fun (h: (p ∨ q) → r) => sorry)
+    (fun (h: (p → r) ∧ (q → r)) => sorry)
+example : ¬(p ∨ q) ↔ ¬p ∧ ¬q :=
+  Iff.intro
+    (fun (h: ¬(p ∨ q)) => sorry)
+    (fun (h: ¬p ∧ ¬q) => sorry)
 example : ¬p ∨ ¬q → ¬(p ∧ q) := sorry
 example : ¬(p ∧ ¬p) := sorry
 example : p ∧ ¬q → ¬(p → q) := sorry
 example : ¬p → (p → q) := sorry
 example : (¬p ∨ q) → (p → q) := sorry
-example : p ∨ False ↔ p := sorry
-example : p ∧ False ↔ False := sorry
+example : p ∨ False ↔ p :=
+  Iff.intro
+    (fun (h: p ∨ False) => sorry)
+    (fun (h: p) => sorry)
+example : p ∧ False ↔ False :=
+  Iff.intro
+    (fun (h: p ∧ False) => sorry)
+    (fun (h: False) => sorry)
 example : (p → q) → (¬q → ¬p) := sorry
