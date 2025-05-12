@@ -176,3 +176,79 @@ example (h : p ∧ q) : q ∧ p :=
   have hp : p := h.left
   suffices hq : q from And.intro hq hp
   show q from And.right h
+
+------------------- Classical Logic ------------------------
+------------------------------------------------------------
+open Classical
+
+variable (p : Prop)
+#check em p -- (p ∨ ¬p), RH ∨ ¬RH is a classical math Riemann Hypothesis
+
+/- one consequence of the law of the excluded middle is the priciple 
+of double negation elimination -/
+
+theorem dne {p : Prop} (h: ¬¬p) : p :=
+  Or.elim (em p)
+    (fun hp : p => hp)
+    (fun hnp : ¬p => absurd hnp h)
+
+/- you can carry out a proof by cases -/
+example (h : ¬¬p) : p :=
+  byCases
+    (fun h1 : p => h1)
+    (fun h1 : ¬p => absurd h1 h)
+
+/- or you can carry out a proof by contradiction -/
+example (h : ¬¬p) : p :=
+  byContradiction
+    (fun h1 : ¬p =>
+      show False from h h1)
+
+/- knowing that p and q are not both true does not necessarily tell you
+which on iss false -/
+example (h: ¬(p ∧ q)) : ¬p ∨ ¬q :=
+  Or.elim (em p)
+    (fun hp : p =>
+      Or.inr
+        (show ¬q from
+          fun hq : q =>
+          h ⟨hp, hq⟩))
+    (fun hp : ¬p =>
+      Or.inl hp)
+
+----------- Examples of Propositional Validities ------------- 
+--------------------------------------------------------------
+#eval "Commutativity"
+#check p ∧ q ↔ q ∧ p
+#check p ∨ q ↔ q ∨ p
+
+#eval "Associativity"
+#check (p ∧ q) ∧ r ↔ p ∧ (q ∧ r)
+#check (p ∨ q) ∨ r ↔ p ∨ (q ∨ r)
+
+#eval "Distributivity"
+#check p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r)
+#check p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r)
+
+#eval "Other properties"
+#check (p → (q → r)) ↔ (p ∧ q → r)
+#check ((p ∨ q) → r) ↔ (p → r) ∧ (q → r)
+#check ¬(p ∨ q) ↔ ¬p ∧ ¬q
+#check ¬p ∨ ¬q → ¬(p ∧ q)
+#check ¬(p ∧ ¬p)
+#check p ∧ ¬q → ¬(p → q)
+#check ¬p → (p → q)
+#check (¬p ∨ q) → (p → q)
+#check p ∨ False ↔ p
+#check p ∧ False ↔ False
+#check ¬(p ↔ ¬p)
+#check (p → q) → (¬q → ¬p)
+
+#eval "These require classical reasoning"
+#check (p → r ∨ s) → ((p → r) ∨ (p → s))
+#check ¬(p ∧ q) → ¬p ∨ ¬q
+#check ¬(p → q) → p ∧ ¬q
+#check (p → q) → (¬p ∨ q)
+#check (¬q → ¬p) → (p → q)
+#check p ∨ ¬p
+#check (((p → q) → p) → p)
