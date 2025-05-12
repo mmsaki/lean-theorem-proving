@@ -18,7 +18,8 @@ example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
     (fun (h: p ∧ (q ∧ r)) => ⟨⟨h.left, h.right.left⟩, h.right.right⟩)
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
   Iff.intro
-    (fun (h: (p ∨ q) ∨ r) => sorry)
+    (fun (h: (p ∨ q) ∨ r) => 
+      h.elim (fun hpq => hpq.elim (fun hp => Or.inl hp) (fun hq => sorry)) (fun hr => sorry))
     (fun (h: p ∨ (q ∨ r)) => sorry)
 
 -- distributivity
