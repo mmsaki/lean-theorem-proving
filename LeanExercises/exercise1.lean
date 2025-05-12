@@ -14,8 +14,8 @@ example : p ∨ q ↔ q ∨ p :=
 -- associativity of ∧ and ∨
 example : (p ∧ q) ∧ r ↔ p ∧ (q ∧ r) :=
   Iff.intro
-    (fun (h: (p ∧ q) ∧ r) => sorry)
-    (fun (h: p ∧ (q ∧ r)) => sorry)
+    (fun (h: (p ∧ q) ∧ r) => ⟨h.left.left, ⟨h.left.right, h.right⟩⟩)
+    (fun (h: p ∧ (q ∧ r)) => ⟨⟨h.left, h.right.left⟩, h.right.right⟩)
 example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
   Iff.intro
     (fun (h: (p ∨ q) ∨ r) => sorry)
