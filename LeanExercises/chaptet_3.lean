@@ -39,8 +39,17 @@ example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
     )
 example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
   Iff.intro
-    (fun (h: p ∨ (q ∧ r)) => sorry)
-    (fun (h: (p ∨ q) ∧ (p ∨ r)) => sorry)
+    (fun (h: p ∨ (q ∧ r)) =>
+      h.elim
+      (fun hp => ⟨Or.inl hp, Or.inl hp⟩)
+      (fun hqr => let ⟨hq, hr⟩ := hqr; ⟨Or.inr hq, Or.inr hr⟩))
+    (fun (h: (p ∨ q) ∧ (p ∨ r)) => let ⟨hpq, hpr⟩ := h;
+      hpq.elim
+        (fun hp => Or.inl hp)
+        (fun hq =>
+          hpr.elim 
+            (fun hp => Or.inl hp)
+            (fun hr => Or.inr ⟨hq, hr⟩)))
 
 -- other properties
 example : (p → (q → r)) ↔ (p ∧ q → r) :=
