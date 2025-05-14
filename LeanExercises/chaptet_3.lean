@@ -26,8 +26,17 @@ example : (p ∨ q) ∨ r ↔ p ∨ (q ∨ r) :=
 -- distributivity
 example : p ∧ (q ∨ r) ↔ (p ∧ q) ∨ (p ∧ r) :=
   Iff.intro
-    (fun (h: p ∧ (q ∨ r)) => sorry)
-    (fun (h: (p ∧ q) ∨ (p ∧ r)) => sorry)
+    (fun (h: p ∧ (q ∨ r)) => 
+      let ⟨hp, hqr⟩ := h
+      hqr.elim 
+      (fun hq => Or.inl ⟨hp, hq⟩) 
+      (fun hr => Or.inr ⟨hp, hr⟩)
+    )
+    (fun (h: (p ∧ q) ∨ (p ∧ r)) => 
+      h.elim 
+      (fun hpq => let ⟨hp, hq⟩ := hpq; ⟨hp, Or.inl hq⟩) 
+      (fun hpr => let ⟨hp, hr⟩ := hpr; ⟨hp, Or.inr hr⟩)
+    )
 example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
   Iff.intro
     (fun (h: p ∨ (q ∧ r)) => sorry)
