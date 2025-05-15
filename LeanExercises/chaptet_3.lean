@@ -54,27 +54,69 @@ example : p ∨ (q ∧ r) ↔ (p ∨ q) ∧ (p ∨ r) :=
 -- other properties
 example : (p → (q → r)) ↔ (p ∧ q → r) :=
   Iff.intro
-    (fun (h: p → (q → r)) => sorry)
-    (fun (h: (p ∧ q → r)) => sorry)
+    (fun (h: p → (q → r)) => 
+      (fun hpq =>
+        let ⟨hp, hq⟩ := hpq
+        h hp hq))
+    (fun (h: (p ∧ q → r)) => 
+      (fun hp => (fun hq => h ⟨hp, hq⟩))
+    )
 example : ((p ∨ q) → r) ↔ (p → r) ∧ (q → r) :=
   Iff.intro
-    (fun (h: (p ∨ q) → r) => sorry)
-    (fun (h: (p → r) ∧ (q → r)) => sorry)
+    (fun (h: (p ∨ q) → r) => ⟨(fun hp => h (Or.inl hp)), (fun hq => h (Or.inr hq))⟩)
+    (fun (h: (p → r) ∧ (q → r)) => 
+      fun pq => 
+        match pq with 
+        | Or.inl hp => h.left hp
+        | Or.inr hq => h.right hq)
 example : ¬(p ∨ q) ↔ ¬p ∧ ¬q :=
   Iff.intro
-    (fun (h: ¬(p ∨ q)) => sorry)
-    (fun (h: ¬p ∧ ¬q) => sorry)
-example : ¬p ∨ ¬q → ¬(p ∧ q) := sorry
-example : ¬(p ∧ ¬p) := sorry
-example : p ∧ ¬q → ¬(p → q) := sorry
-example : ¬p → (p → q) := sorry
-example : (¬p ∨ q) → (p → q) := sorry
+    (fun (h: ¬(p ∨ q)) => ⟨(fun hp => h (Or.inl hp)), (fun hq => h (Or.inr hq))⟩)
+    (fun (h: ¬p ∧ ¬q) => 
+      fun pq => 
+        match pq with 
+          | Or.inl hp => h.left hp
+          | Or.inr hq => h.right hq)
+example : ¬p ∨ ¬q → ¬(p ∧ q) := 
+  fun h => 
+    fun hpq =>
+        match h with
+        | Or.inl hnp => hnp hpq.left
+        | Or.inr hnq => hnq hpq.right
+example : ¬(p ∧ ¬p) := 
+  fun h => h.right h.left
+
+example : p ∧ ¬q → ¬(p → q) := 
+  fun ⟨hp, hnq⟩ => 
+    fun hpq => 
+      hnq (hpq hp)
+
+example : ¬p → (p → q) := 
+  fun hnp hp => False.elim (hnp hp)
+
+example : (¬p ∨ q) → (p → q) := 
+  fun h hp =>
+    match h with
+    | Or.inl hnp => False.elim (hnp hp)
+    | Or.inr hq => hq
+
 example : p ∨ False ↔ p :=
   Iff.intro
-    (fun (h: p ∨ False) => sorry)
-    (fun (h: p) => sorry)
+    (fun (h: p ∨ False) => 
+      match h with
+      | Or.inl hp => hp
+      | Or.inr f => False.elim f)
+    (fun (hp: p) => 
+      Or.inl hp
+    )
+
 example : p ∧ False ↔ False :=
   Iff.intro
-    (fun (h: p ∧ False) => sorry)
-    (fun (h: False) => sorry)
-example : (p → q) → (¬q → ¬p) := sorry
+    (fun (h: p ∧ False) => h.right)
+    (fun (h: False) => And.intro (False.elim h) h)
+
+example : (p → q) → (¬q → ¬p) := 
+  fun h: p → q => 
+  fun hnq : ¬q => 
+  fun hp : p => 
+  hnq (h hp)
