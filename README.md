@@ -1,4 +1,4 @@
-# lean-exercises
+# lean theorem proving guide
 
 01. [Dependent type theory](https://lean-lang.org/theorem_proving_in_lean4/dependent_type_theory.html)
 02. [Propositions and proofs](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html)
